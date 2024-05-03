@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "tf2-bfgs"
+version = "0.1.0"
+authors = [
+  { name="Pi-Yueh Chuang", email="pychuang@gwu.edu" },
+  { name="Matthieu Barreau", email="barreau@kth.se" },
+]
+description = "Wrapper to train a tf.Module or tf.keras.Model using (L)BFGS optimizer from Tensorflow Probability"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.6.9"
+tensorflow = "^2.0"
+tensorflow-probability = "^0.8"
+numpy = "^1.17"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
