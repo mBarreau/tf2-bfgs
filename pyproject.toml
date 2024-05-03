@@ -1,10 +1,7 @@
 [tool.poetry]
 name = "tf2-bfgs"
 version = "0.1.0"
-authors = [
-  { name="Pi-Yueh Chuang", email="pychuang@gwu.edu" },
-  { name="Matthieu Barreau", email="barreau@kth.se" },
-]
+authors = ["Pi-Yueh Chuang <pychuang@gwu.edu>", "Matthieu Barreau <barreau@kth.se>"]
 description = "Wrapper to train a tf.Module or tf.keras.Model using (L)BFGS optimizer from Tensorflow Probability"
 readme = "README.md"
 
