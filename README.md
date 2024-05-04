@@ -1,8 +1,9 @@
 # tf2-bfgs
+> Use BFGS optimizer in Tensorflow 2 almost as it was with Tensorflow 1 and `tf.contrib`
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-`tf2-bfgs` is a wrapper to train a tf.Module or tf.keras.Model using (L-)BFGS optimizer from Tensorflow Probability.
+`tf2-bfgs` is a wrapper to train a tf.Module or tf.keras.Model using (L-)BFGS optimizer from Tensorflow Probability. This work uses the code snippet from Pi-Yueh Chuang available [here](https://gist.github.com/piyueh/712ec7d4540489aad2dcfb80f9a54993).
 
 ## Install
 
@@ -52,7 +53,7 @@ The number of parameters to the minimize function is the same as those of `get_c
 
 ### Using Tensorflow tf.Module
 
-Define the multilayer perceptron as follows:
+We will define our own multilayer perceptron as follows:
 ```
 def init(layers):
     Ws, bs = [], []
@@ -113,7 +114,7 @@ The number of parameters to the minimize function is the same as those of `get_c
 
 ### Using physics-informed neural networks
 
-This optimizer might be useful when dealing with physics-informed neural network. To this end, we must change the cost to include the minimization of the physics residual.
+This optimizer might be useful when dealing with physics-informed neural network. To this end, we must change the cost from the previous subsection to include the minimization of the physics residual.
 
 ```
 @tf.function
