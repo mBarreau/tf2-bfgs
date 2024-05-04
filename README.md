@@ -11,15 +11,49 @@ You can run the following command in a dedicated virtual environment:
 pip install git+https://github.com/mBarreau/tf2-bfgs
 ```
 
-## First example
+## Examples
 
-Define the multilayer perceptron as follows:
+We will train a regression model to fit a `cos`. Here are the training data.
 ```
 import tensorflow as tf
 import numpy as np
 from tf2-bfgs import LBFGS
 
+t = np.linspace(0, 1, 10).reshape((-1, 1)).astype(np.float32)
+x = np.cos(t)
+```
 
+### Using Keras
+
+We define the model first, a multilayer perceptron.
+```
+pred_model = tf.keras.Sequential(
+        [tf.keras.Input(shape=[2,]),
+         tf.keras.layers.Dense(64, "tanh"),
+         tf.keras.layers.Dense(64, "tanh"),
+         tf.keras.layers.Dense(1, None)])
+```
+
+The loss function is the traditional mean squared error:
+```
+def get_cost(model, t, x):
+    x_hat = model(t)
+    return tf.keras.losses.MeanSquaredError()(x_hat, x)
+```
+
+**_NOTE:_** for differentiablility reasons, the output of the model `x_hat = model(t)` should be computed inside the cost function.
+
+```
+optimizer_BFGS = LBFGS(get_cost, omega.trainable_variables)
+results = optimizer_BFGS.minimize(omega, t, x)
+```
+
+The number of parameters to the minimize function is the same as those of `get_cost`.
+
+### Using Tensorflow tf.Module
+
+Define the multilayer perceptron as follows:
+```
 def init(layers):
     Ws, bs = [], []
     for i in range(len(layers) - 1):
@@ -58,7 +92,7 @@ class NeuralNetwork(tf.Module):
 omega = NeuralNetwork([10]*3)
 ```
 
-**_NOTE:_** It is of main importance that the class inherits from `tf.Module` or `tf.keras.Model`.
+**_NOTE:_** It is of main importance that the class inherits from `tf.Module`.
 
 Define the cost function as follows:
 ```
@@ -71,15 +105,13 @@ def get_cost(model, t, x):
 
 The training is perfomed by the following snippet:
 ```
-t = np.linspace(0, 1, 10).reshape((-1, 1)).astype(np.float32)
-x = np.cos(t)
 optimizer_BFGS = LBFGS(get_cost, omega.trainable_variables)
 results = optimizer_BFGS.minimize(omega, t, x)
 ```
 
 The number of parameters to the minimize function is the same as those of `get_cost`.
 
-## Physics-informed neural network
+### Using physics-informed neural networks
 
 This optimizer might be useful when dealing with physics-informed neural network. To this end, we must change the cost to include the minimization of the physics residual.
 
@@ -101,6 +133,17 @@ def get_pinn_cost(model, t, x, t_phys):
 Training is done in a similar manner.
 ```
 t_phys = np.linspace(0, 1, 100).reshape((-1, 1)).astype(np.float32)
-optimizer_BFGS = LBFGS(get_cost, omega.trainable_variables, options)
+optimizer_BFGS = LBFGS(get_cost, omega.trainable_variables)
 results = optimizer_BFGS.minimize(omega, t, x, t_phys)
 ```
+
+## Options
+
+The optimizer has the same options as the function `tfp.optimizer.bfgs_minimize` in the case of `BFGS` or `tfp.optimizer.lbfgs_minimize` in the case of `LBFGS`.
+
+For instance, to set the maximum number of iterations to 100, we can use the following code when defining the optimizer:
+```
+options = {'max_iterations': 100}
+optimizer_BFGS = LBFGS(get_cost, omega.trainable_variables, options)
+```
+
