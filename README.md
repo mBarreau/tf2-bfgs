@@ -9,7 +9,16 @@
 
 You can run the following command in a dedicated virtual environment:
 ```
+pip install tf2-bfgs
+```
+or the following one to get the latest version
+```
 pip install git+https://github.com/mBarreau/tf2-bfgs
+```
+
+You might also need to install extra dependencies such as
+```
+pip install tensorflow-probabilities tf_keras
 ```
 
 ## Examples
