@@ -1,12 +1,22 @@
+import logging   # nopep8
+logging.getLogger('tensorflow').setLevel(logging.ERROR)   # nopep8
+logging.getLogger('tensorflow_probability').setLevel(logging.ERROR)   # nopep8
+
 import numpy
 import tensorflow as tf
 import tensorflow_probability as tfp
+import keras
 
 
 class BFGS:
     def __init__(self, loss, var_list, options={}) -> None:
         self.loss = loss
-        self.var_list = var_list
+        self.var_list = []
+        for v in var_list:
+            if isinstance(v, keras.src.backend.common.variables.KerasVariable):
+                self.var_list.append(v.value)
+            else:
+                self.var_list.append(v)
         self.options = options
         self.func = self._function_factory()
 

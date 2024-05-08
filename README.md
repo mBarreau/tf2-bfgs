@@ -18,7 +18,7 @@ We will train a regression model to fit a `cos`. Here are the training data.
 ```
 import tensorflow as tf
 import numpy as np
-from tf2-bfgs import LBFGS
+from tf2_bfgs import LBFGS
 
 t = np.linspace(0, 1, 10).reshape((-1, 1)).astype(np.float32)
 x = np.cos(t)
@@ -28,11 +28,12 @@ x = np.cos(t)
 
 We define the model first, a multilayer perceptron.
 ```
-pred_model = tf.keras.Sequential(
-        [tf.keras.Input(shape=[2,]),
-         tf.keras.layers.Dense(64, "tanh"),
-         tf.keras.layers.Dense(64, "tanh"),
-         tf.keras.layers.Dense(1, None)])
+omega = tf.keras.Sequential(
+    [tf.keras.Input(shape=[1,]),
+     tf.keras.layers.Dense(10, "tanh"),
+     tf.keras.layers.Dense(10, "tanh"),
+     tf.keras.layers.Dense(10, "tanh"),
+     tf.keras.layers.Dense(1, None)])
 ```
 
 The loss function is the traditional mean squared error:
@@ -126,7 +127,7 @@ def get_pinn_cost(model, t, x, t_phys):
     with tf.GradientTape(watch_accessed_variables=False) as tape:
         tape.watch(t)
         model_tf = model(t)
-    dmodel_dt = tape.gradient(model_tf, t)
+    dmodel_dt = tape.gradient(model_tf, t_phys)
     physics_cost = tf.reduce_mean(tf.square(dmodel_dt + tf.sin(t)))
     return data_cost + 0.1 * physics_cost
 ```
@@ -134,7 +135,7 @@ def get_pinn_cost(model, t, x, t_phys):
 Training is done in a similar manner.
 ```
 t_phys = np.linspace(0, 1, 100).reshape((-1, 1)).astype(np.float32)
-optimizer_BFGS = LBFGS(get_cost, omega.trainable_variables)
+optimizer_BFGS = LBFGS(get_pinn_cost, omega.trainable_variables)
 results = optimizer_BFGS.minimize(omega, t, x, t_phys)
 ```
 
