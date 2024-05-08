@@ -8,7 +8,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = ">=3.9"
 tensorflow = ">=2.12"
-tensorflow-intel = ">=2.12"
+tensorflow-intel = { version = ">=2.12", platform = "win32" }
 tensorflow-probability = ">=0.24"
 numpy = ">=1.17"
 tf-keras = ">=2.16.0"
