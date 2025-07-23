@@ -13,7 +13,7 @@ class BFGS:
         self.loss = loss
         self.var_list = []
         for v in var_list:
-            if isinstance(v, keras.src.backend.common.variables.KerasVariable):
+            if isinstance(v, keras.src.backend.common.variables.Variable):
                 self.var_list.append(v.value)
             else:
                 self.var_list.append(v)
