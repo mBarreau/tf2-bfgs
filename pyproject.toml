@@ -6,12 +6,12 @@ description = "Wrapper to train a tf.Module or tf.keras.Model using (L)BFGS opti
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.12"
-tensorflow = ">=2.12"
-tensorflow-intel = { version = ">=2.12", platform = "win32" }
-tensorflow-probability = ">=0.24"
-numpy = ">=1.17"
-tf-keras = ">=2.16.0"
+python = ">=3.11"
+tensorflow = ">=2.10"
+tensorflow-intel = { version = ">=2.10", platform = "win32" }
+tensorflow-probability = ">=0.20"
+numpy = ">=1.15"
+tf-keras = ">=2.15.0"
 keras = ">=3.0"
 
 [tool.poetry.group.dev.dependencies]  
